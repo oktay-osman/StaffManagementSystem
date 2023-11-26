@@ -3,6 +3,7 @@ package model;
 import services.*;
 
 import java.io.Serializable;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -144,10 +145,15 @@ public class StaffManager implements Manager {
                 if(((Employee) employee).getId() == id) {
                     System.out.println("Employee found: \n" +
                             employee.toString() + "\n");
-                    System.out.println("");
-                    //TODO prompt them to change only certain field
-                    // or just type out all the fields that are editable
-                   // String[] values = scanner.next().split(", *");
+                    System.out.println("Set name: (current one {" +((Employee) employee).getName() +"}");
+                    ((Employee) employee).setName(scanner.nextLine());
+                    System.out.println("Set department: (current one {" +((Employee) employee).getDepartment() + "})");
+                    ((Employee) employee).setDepartment(scanner.nextLine());
+                    System.out.println("Set salary: (current one {" + ((Employee) employee).getSalary() +"})");
+                    ((Employee) employee).setSalary(Double.parseDouble(scanner.nextLine()));
+                    employees.set(id, (Employee) employee);
+                    saveData(employees);
+                    break;
                 }
             }
         }
@@ -157,6 +163,11 @@ public class StaffManager implements Manager {
     public List<Employee> csvToList() {
         CSVReader reader = new CSVReader();
         return (List<Employee>) reader.read(filePath);
+    }
+
+    public void saveData(List<Serializable> items){
+        CSVWriter writer = new CSVWriter();
+        writer.write(items, filePath);
     }
 
     public String printEmpInfo(Employee employee) {
